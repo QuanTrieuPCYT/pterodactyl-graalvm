@@ -22,6 +22,8 @@
 # SOFTWARE.
 #
 
+source /flags.sh
+
 # Default the TZ environment variable to UTC.
 TZ=${TZ:-UTC}
 export TZ
