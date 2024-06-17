@@ -39,20 +39,15 @@ cd /home/container || exit 1
 printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mjava -version\n"
 java -version
 
-# Setting mimalloc in LD_PRELOAD
-printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mLD_PRELOAD=/opt/mimalloc/libmimalloc.so && export LD_PRELOAD\n"
-LD_PRELOAD=/opt/mimalloc/libmimalloc.so
-export LD_PRELOAD
-
 # Use transparent huge pages
-printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mHUGETLB_MORECORE=thp && export HUGETLB_MORECORE\n"
-HUGETLB_MORECORE=thp
-export HUGETLB_MORECORE
+#printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mHUGETLB_MORECORE=thp && export HUGETLB_MORECORE\n"
+#HUGETLB_MORECORE=thp
+#export HUGETLB_MORECORE
 
 # Forcing 2MB pages
-printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mMIMALLOC_LARGE_OS_PAGES=1 && export MIMALLOC_LARGE_OS_PAGES\n"
-MIMALLOC_LARGE_OS_PAGES=1
-export MIMALLOC_LARGE_OS_PAGES
+#printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mMIMALLOC_LARGE_OS_PAGES=1 && export MIMALLOC_LARGE_OS_PAGES\n"
+#MIMALLOC_LARGE_OS_PAGES=1
+#export MIMALLOC_LARGE_OS_PAGES
 
 # Convert all of the "{{VARIABLE}}" parts of the command into the expected shell
 # variable format of "${VARIABLE}" before evaluating the string and automatically
@@ -62,6 +57,6 @@ PARSED=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g' | eval echo "$(cat
 # Display the command we're running in the output, and then execute it with the env
 # from the container itself.
 # I'm resetting the environment variables for mimalloc execution, just in case.
-printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0m%s\n" "LD_PRELOAD=/opt/mimalloc/libmimalloc.so HUGETLB_MORECORE=thp MIMALLOC_LARGE_OS_PAGES=1 $PARSED"
+printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0m%s\n" "LD_PRELOAD=/opt/mimalloc/libmimalloc.so $PARSED"
 # shellcheck disable=SC2086
-eval LD_PRELOAD=/opt/mimalloc/libmimalloc.so HUGETLB_MORECORE=thp MIMALLOC_LARGE_OS_PAGES=1 ${PARSED}
+eval LD_PRELOAD=/opt/mimalloc/libmimalloc.so ${PARSED}
