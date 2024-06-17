@@ -6,10 +6,10 @@
 FROM ubuntu:22.04
 
 ARG TARGETPLATFORM
-ARG GRAAL_VERSION=22.3.2
+ARG GRAAL_VERSION=22.3.5
 ARG JAVA_VERSION=11
 
-MAINTAINER RikoDEV, <kontakt@riko.dev>
+MAINTAINER QuanTrieuPCYT, <admin@qtpc.tech>
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -21,10 +21,10 @@ RUN apt-get update -y \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && locale-gen en_US.UTF-8 \
   && case ${TARGETPLATFORM} in \
-         "linux/amd64")  ARCH=linux-amd64  ;; \
-         "linux/arm64")  ARCH=linux-aarch64  ;; \
+         "linux/amd64")  ARCH=amd64  ;; \
+         "linux/arm64")  ARCH=aarch64  ;; \
     esac \
-  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://oca.opensource.oracle.com/gds/GRAALVM_EE_JAVA11_22_3_2/graalvm-ee-java11-${ARCH}-22.3.2.tar.gz \
+  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/myshishbox/ee/releases/download/${GRAAL_VERSION}/graalvm-ee-java${JAVA_VERSION}-linux-${ARCH}-${GRAAL_VERSION}.tar.gz \
   && mkdir -p /opt/java/graalvm \
   && cd /opt/java/graalvm \
   && tar -xf /tmp/graalvm.tar.gz --strip-components=1 \
@@ -35,7 +35,15 @@ RUN apt-get update -y \
 ENV JAVA_HOME=/opt/java/graalvm \
     PATH="/opt/java/graalvm/bin:$PATH"
 
-# Step 2 - add pterodactyl stuff
+# Step 2 - build and install mimalloc
+RUN apt-get update -y \
+  && apt-get install -y build-essential g++ libhugetlbfs-bin cmake \
+  && git clone https://github.com/microsoft/mimalloc /opt/mimalloc \
+  && cd /opt/mimalloc \
+  && cmake /opt/mimalloc \
+  && make -C /opt/mimalloc
+
+# Step 3 - add pterodactyl stuff
 RUN useradd -d /home/container -m container
 
 USER        container

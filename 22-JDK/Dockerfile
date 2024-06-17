@@ -9,7 +9,7 @@ ARG TARGETPLATFORM
 ARG GRAAL_VERSION=21.0.0
 ARG JAVA_VERSION=21
 
-MAINTAINER RikoDEV, <kontakt@riko.dev>
+MAINTAINER QuanTrieuPCYT, <admin@qtpc.tech>
 
 ENV DEBIAN_FRONTEND=noninteractive
 
@@ -35,7 +35,15 @@ RUN apt-get update -y \
 ENV JAVA_HOME=/opt/java/graalvm \
     PATH="/opt/java/graalvm/bin:$PATH"
 
-# Step 2 - add pterodactyl stuff
+# Step 2 - build and install mimalloc
+RUN apt-get update -y \
+  && apt-get install -y build-essential g++ libhugetlbfs-bin cmake \
+  && git clone https://github.com/microsoft/mimalloc /opt/mimalloc \
+  && cd /opt/mimalloc \
+  && cmake /opt/mimalloc \
+  && make -C /opt/mimalloc
+
+# Step 3 - add pterodactyl stuff
 RUN useradd -d /home/container -m container
 
 USER        container

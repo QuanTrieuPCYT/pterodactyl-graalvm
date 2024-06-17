@@ -6,8 +6,8 @@
 FROM ubuntu:22.04
 
 ARG TARGETPLATFORM
-ARG GRAAL_VERSION=22.3.3
-ARG JAVA_VERSION=11
+ARG GRAAL_VERSION=21.3.10
+ARG JAVA_VERSION=8
 
 MAINTAINER QuanTrieuPCYT, <admin@qtpc.tech>
 
@@ -22,9 +22,8 @@ RUN apt-get update -y \
   && locale-gen en_US.UTF-8 \
   && case ${TARGETPLATFORM} in \
          "linux/amd64")  ARCH=amd64  ;; \
-         "linux/arm64")  ARCH=aarch64  ;; \
     esac \
-  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-java${JAVA_VERSION}-linux-${ARCH}-${GRAAL_VERSION}.tar.gz \
+  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/myshishbox/ee/releases/download/${GRAAL_VERSION}/graalvm-ee-java${JAVA_VERSION}-linux-${ARCH}-${GRAAL_VERSION}.tar.gz \
   && mkdir -p /opt/java/graalvm \
   && cd /opt/java/graalvm \
   && tar -xf /tmp/graalvm.tar.gz --strip-components=1 \
@@ -34,6 +33,7 @@ RUN apt-get update -y \
 
 ENV JAVA_HOME=/opt/java/graalvm \
     PATH="/opt/java/graalvm/bin:$PATH"
+
 # Step 2 - build and install mimalloc
 RUN apt-get update -y \
   && apt-get install -y build-essential g++ libhugetlbfs-bin cmake \
