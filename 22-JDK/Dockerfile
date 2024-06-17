@@ -41,7 +41,8 @@ RUN apt-get update -y \
   && git clone https://github.com/microsoft/mimalloc /opt/mimalloc \
   && cd /opt/mimalloc \
   && cmake /opt/mimalloc \
-  && make -C /opt/mimalloc
+  && make -C /opt/mimalloc \
+  && chmod -R 777 /opt/mimalloc/libmimalloc.so
 
 # Step 3 - add pterodactyl stuff
 RUN useradd -d /home/container -m container

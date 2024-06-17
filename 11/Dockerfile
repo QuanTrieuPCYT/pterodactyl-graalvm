@@ -34,13 +34,15 @@ RUN apt-get update -y \
 
 ENV JAVA_HOME=/opt/java/graalvm \
     PATH="/opt/java/graalvm/bin:$PATH"
+
 # Step 2 - build and install mimalloc
 RUN apt-get update -y \
   && apt-get install -y build-essential g++ libhugetlbfs-bin cmake \
   && git clone https://github.com/microsoft/mimalloc /opt/mimalloc \
   && cd /opt/mimalloc \
   && cmake /opt/mimalloc \
-  && make -C /opt/mimalloc
+  && make -C /opt/mimalloc \
+  && chmod -R 777 /opt/mimalloc/libmimalloc.so
 
 # Step 3 - add pterodactyl stuff
 RUN useradd -d /home/container -m container
