@@ -37,7 +37,7 @@ ENV JAVA_HOME=/opt/java/graalvm \
 
 # Step 2 - build and install mimalloc
 RUN apt-get update -y \
-  && apt-get install -y build-essential g++ libhugetlbfs-bin cmake \
+  && apt-get install -y build-essential g++ cmake \
   && git clone https://github.com/microsoft/mimalloc /opt/mimalloc \
   && cd /opt/mimalloc \
   && cmake /opt/mimalloc \
