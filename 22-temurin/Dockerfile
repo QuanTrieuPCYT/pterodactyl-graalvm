@@ -3,11 +3,13 @@
 # Environment: Java
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
-FROM ubuntu:22.04
+FROM docker.io/library/debian:trixie-slim
 
 ARG TARGETPLATFORM
-ARG GRAAL_VERSION=22.3.3
-ARG JAVA_VERSION=17
+ARG JDK_VERSION=22.0.1+8
+ARG JDK_VERSION_2=22.0.1_8
+ARG JAVA_VERSION=22
+ARG TYPE=jdk
 
 MAINTAINER QuanTrieuPCYT, <admin@qtpc.tech>
 
@@ -21,19 +23,19 @@ RUN apt-get update -y \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && locale-gen en_US.UTF-8 \
   && case ${TARGETPLATFORM} in \
-         "linux/amd64")  ARCH=amd64  ;; \
+         "linux/amd64")  ARCH=x64  ;; \
          "linux/arm64")  ARCH=aarch64  ;; \
     esac \
-  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-java${JAVA_VERSION}-linux-${ARCH}-${GRAAL_VERSION}.tar.gz \
-  && mkdir -p /opt/java/graalvm \
-  && cd /opt/java/graalvm \
-  && tar -xf /tmp/graalvm.tar.gz --strip-components=1 \
-  && export PATH="/opt/java/graalvm/bin:$PATH" \
+  && curl --retry 3 -Lfso /tmp/temurin.tar.gz https://github.com/adoptium/temurin${JAVA_VERSION}-binaries/releases/download/jdk-${JDK_VERSION}/OpenJDK${JAVA_VERSION}U-${TYPE}_${ARCH}_linux_hotspot_${JDK_VERSION_2}.tar.gz  \
+  && mkdir -p /opt/java/temurin \
+  && cd /opt/java/temurin \
+  && tar -xf /tmp/temurin.tar.gz --strip-components=1 \
+  && export PATH="/opt/java/temurin/bin:$PATH" \
   && rm -rf /var/lib/apt/lists/* \
-  && rm -rf /tmp/graalvm.tar.gz
+  && rm -rf /tmp/temurin.tar.gz
 
-ENV JAVA_HOME=/opt/java/graalvm \
-    PATH="/opt/java/graalvm/bin:$PATH"
+ENV JAVA_HOME=/opt/java/temurin \
+    PATH="/opt/java/temurin/bin:$PATH"
 
 # Step 2 - build and install mimalloc
 RUN apt-get update -y \
@@ -52,6 +54,6 @@ ENV         USER=container HOME=/home/container
 
 WORKDIR     /home/container
 
-COPY        ./../entrypoint.sh ./../flags.sh /
+COPY        ./../entrypoint.sh /entrypoint.sh
 
 CMD         ["/bin/bash", "/entrypoint.sh"]

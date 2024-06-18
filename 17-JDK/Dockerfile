@@ -17,7 +17,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 RUN apt-get update -y \
-  && apt-get install -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata locales iproute2 \
+  && apt-get install --no-install-recommends -y curl ca-certificates openssl git tar sqlite3 fontconfig tzdata locales iproute2 \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && locale-gen en_US.UTF-8 \
   && case ${TARGETPLATFORM} in \
@@ -37,7 +37,7 @@ ENV JAVA_HOME=/opt/java/graalvm \
 
 # Step 2 - build and install mimalloc
 RUN apt-get update -y \
-  && apt-get install -y build-essential g++ cmake \
+  && apt-get install --no-install-recommends -y make g++ cmake \
   && git clone https://github.com/microsoft/mimalloc /opt/mimalloc \
   && cd /opt/mimalloc \
   && cmake /opt/mimalloc \
