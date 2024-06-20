@@ -10,7 +10,8 @@ echo "22-JDK
 19-EE
 20-JDK
 22-OC
-22-temurin" | sed -re 's/(.*)$/GraalVM &|ghcr.io\/quantrieupcyt\/pterodactyl-graalvm:&/'
+22-temurin
+23-temurin" | sed -re 's/(.*)$/GraalVM &|ghcr.io\/quantrieupcyt\/pterodactyl-graalvm:&/'
 
 # Copy this list into dashboard.acme.co/admin/nests/egg/<the egg ofc>
 echo "
@@ -28,5 +29,6 @@ GraalVM 20-JDK|ghcr.io/quantrieupcyt/pterodactyl-graalvm:20-JDK
 GraalVM 22-OC|ghcr.io/quantrieupcyt/pterodactyl-graalvm:22-OC
 Temurin 22|ghcr.io/quantrieupcyt/pterodactyl-graalvm:22-temurin
 Temurin 21|ghcr.io/quantrieupcyt/pterodactyl-graalvm:21-temurin
+Temurin 23|ghcr.io/quantrieupcyt/pterodactyl-graalvm:23-temurin
 
 " > /dev/null
