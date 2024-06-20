@@ -3,7 +3,7 @@
 # Environment: Java
 # Minimum Panel Version: 1.7.0
 # ----------------------------------
-FROM ubuntu:22.04
+FROM docker.io/library/debian:trixie-slim
 
 ARG TARGETPLATFORM
 ARG GRAAL_VERSION=17.0.9

@@ -6,8 +6,8 @@
 FROM docker.io/library/debian:trixie-slim
 
 ARG TARGETPLATFORM
-ARG GRAAL_VERSION=22.3.1
-ARG JAVA_VERSION=19
+ARG GRAAL_VERSION=23.0.0-ea.14
+ARG JAVA_VERSION=23
 
 MAINTAINER QuanTrieuPCYT, <admin@qtpc.tech>
 
@@ -21,10 +21,10 @@ RUN apt-get update -y \
   && echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
   && locale-gen en_US.UTF-8 \
   && case ${TARGETPLATFORM} in \
-         "linux/amd64")  ARCH=amd64  ;; \
+         "linux/amd64")  ARCH=x64  ;; \
          "linux/arm64")  ARCH=aarch64  ;; \
     esac \
-  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-${GRAAL_VERSION}/graalvm-ce-java${JAVA_VERSION}-linux-${ARCH}-${GRAAL_VERSION}.tar.gz \
+  && curl --retry 3 -Lfso /tmp/graalvm.tar.gz https://github.com/graalvm/oracle-graalvm-ea-builds/releases/download/jdk-${GRAAL_VERSION}/graalvm-jdk-${GRAAL_VERSION}_linux-${ARCH}_bin.tar.gz \
   && mkdir -p /opt/java/graalvm \
   && cd /opt/java/graalvm \
   && tar -xf /tmp/graalvm.tar.gz --strip-components=1 \
