@@ -27,6 +27,7 @@ jobs:
           - 19-EE
           - 22-OC
           - 23-OC
+          - 25-OC
           - 22-temurin
           - 23-temurin
     steps:
